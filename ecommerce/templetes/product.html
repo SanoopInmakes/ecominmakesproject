@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadesription %}
+        {{ product.descripton|truncatewords:155 }}
+
+
+{% endblock %}
+
+
+{% block title %}
+    {% if category %}
+        {{ product.name}} - Zepz Shopie
+
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row my_product_page">
+        <div class="mx_auto">
+
+            <p> <a href="{% url 'shop:allProductCat' %}">Home</a> | <a href="{{product.category.get_url}}">{{product.category}}</a> | {{product.name}}</p>
+        </div>
+    </div><br>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <div>
+                <img class="image_view" style="width:60%" src="{{product.image.url}}" alt="{{product.name}}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <div>
+                <h1 class="product_title text-center"><b>{{product.name}}</b></h1>
+                <p class="product_price" ><b>{{product.price}}</b></p>
+                <p class="product_details_title"><b>Product Details</b></p>
+                <p><pre class="product_details text-justify">{{product.description}}</pre></p>
+
+                {% if product.stock <= 0 %}
+                    <p class="stock_details "><a>Out of Stock</a></p>
+                {% else %}
+                    <a class="btn btn-secondary" href="{% url 'cart:add_cart' product.id %}">Add to Cart</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

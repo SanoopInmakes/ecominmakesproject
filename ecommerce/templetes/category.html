@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadesription %}
+    {% if category %}
+
+        {{ category.descripton|truncatewords:155 }}
+    {% else %}
+        Welcome to zepz shopie where you can buys diffarent items....
+    {% endif %}
+{% endblock %}
+
+
+{% block title %}
+    {% if category %}
+        {{ category.name}} - Zepz Shopie
+    {% else %}
+        See our new collections - Zepz Shopie
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class">
+                <div class="mx-auto">
+                <p> <a href="{% url 'shop:allProductCat' %}">Our Product Collection</a> | <a href="{{category.get_url}}">{{category}}</a> </p>
+                 </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="mx-auto">
+       {% if category %}
+
+            <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" >
+        </div><br>
+        <div>
+            <h1 class="text-center my_title">{{category.name}}</h1>
+            <p class="text-justify">{{category.description}}</p>
+
+    </div>
+        {% else %}
+        <div>
+            <img class="my_image my_image_padding" src="{% static 'image/Banner3.png' %}" alt="Our Products">
+        </div><br>
+        <div>
+            <h1 class="text-center my_title">Our Product Collection</h1>
+            <p class="text-justify">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary</p>
+        </div>
+       {% endif %}
+
+
+<div class="container">
+
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-6 col-lg-4 ">
+            <div class="card text-center box" style="width:20rem; height:28rem;">
+                <a href="{{product.get_url}}"><img  class="card-img-top product_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+                <div class="card-body">
+                    <h5>{{product.name}}</h5>
+                    <p>{{product.price}}</p>
+                <div>
+                    {% if product.stock <= 0 %}
+                   <a class="add_cart btn-danger">Out of Stock</a>
+                {% else %}
+                    <a class="add_cart btn btn-primary" href="{% url 'cart:add_cart' product.id %}">Add to Cart</a>
+                {% endif %}
+
+
+                </div>
+
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                    {% if products.number == pg %}
+                         <a href="?page={{pg}}" class="active btn btn-secondary btn-sm">{{pg}}</a>
+                    {% endif %}
+                    {% if products.number != pg %}
+                    <a href="?page={{pg}}" class="btn btn-light btn-sm">{{pg}}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        </div>
+
+
+
+</div>
+
+
+
+
+{% endblock %}
